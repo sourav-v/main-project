@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Untitled Document</title>
+</head>
+
+<body>
+<form id="form1" name="form1" method="post" action="{% url 'editpsychiatrist1' %}">
+  <div align="center">
+    <table width="200" border="1">
+      <tr>
+        <td>FIRST NAME </td>
+        <td><label>
+          <input type="text" name="textfield"  Required pattern="[A-Z a-z.]{3,25}" value="{{val.firstname}}"/>
+        </label></td>
+      </tr>
+      <tr>
+        <td>LAST NAME </td>
+        <td><label>
+          <input type="text" name="textfield2"  Required pattern="[A-Z a-z.]{3,25}" value="{{val.lastname}}" />
+        </label></td>
+      </tr>
+      <tr>
+        <td>PLACE</td>
+        <td><label>
+          <input type="text" name="textfield3"  pattern="[A-Z a-z.]{3,25}" value="{{val.place}}" />
+        </label></td>
+      </tr>
+      <tr>
+        <td>POST</td>
+        <td><label>
+          <input type="text" name="textfield4" pattern="[A-Z a-z.]{3,25}" value="{{val.post}}" />
+        </label></td>
+      </tr>
+      <tr>
+        <td>EMAIL</td>
+        <td><label>
+          <input type="text" name="textfield5" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}" value="{{val.email}}" />
+        </label></td>
+      </tr>
+      <tr>
+        <td>GENDER</td>
+        <td><label>
+          <input name="radiobutton" type="radio" checked  value="male" {% if val.gender == 'male' %}checked {% endif %} />
+        male
+        <input name="radiobutton" type="radio"  value="female" {% if val.gender == 'female' %}checked {% endif %}/>
+        female
+        <input name="radiobutton" type="radio"  value="others" {% if val.gender == 'others' %}checked {% endif %} />
+        others</label></td>
+      </tr>
+      <tr>
+        <td>PhONE NO </td>
+        <td><label>
+          <input type="text" name="textfield7" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}" value="{{val.phone}}" />
+        </label></td>
+      </tr>
+      
+      <tr>
+        <td colspan="2"><label>
+          <div align="center">
+            <input type="submit" name="Submit" value="REGISTER" />
+          </div>
+        </label></td>
+      </tr>
+      </table>
+  </div>
+  <div align="center"></div>
+</form>
+</body>
+</html>
