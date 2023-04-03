@@ -1,17 +1,13 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>Untitled Document</title>
-</head>
+{% extends 'adminindex.html ' %}
+{% block body %}
 
 <body>
 <form id="form1" name="form1" method="post" action="">
-  <table width="200" border="1">
+  <table class="table table-striped">
     <tr>
-      <td>COMPLAINT</td>
-      <td>USER NAME </td>
-      <td>DATE</td>
+      <th>COMPLAINT</th>
+      <th>USER NAME </th>
+      <th>DATE</th>
       <td>&nbsp;</td>
     </tr>
     {% for i in val  %}
@@ -19,10 +15,10 @@
       <td>{{i.complaint}}</td>
       <td>{{i.uid.firstname}} {{i.uid.lastname}}</td>
       <td>{{i.date}}</td>
-      <td><a href="{% url 'admin_send_reply' id=i.id %}">REPLY</a></td>
+      <td><a href="{% url 'admin_send_reply' id=i.id %}#about" class="btn btn-primary">REPLY</a></td>
     </tr>
     {% endfor %}
   </table>
 </form>
 </body>
-</html>
+{% endblock %}

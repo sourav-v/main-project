@@ -25,13 +25,13 @@ def user_home(request):
 
 
 def main(request):
-    return render(request,"login form.html")
+    return render(request,"index.html")
 
 
 
 
 def user_registration(request):
-    return render(request,"user reg.html")
+    return render(request,"regindex.html")
 
 
 
@@ -293,13 +293,16 @@ def login1(request):
         if ob is None:
             return HttpResponse('''<script>alert("invalid");window.location="/"</script>''')     
         elif ob.type == "admin":
-            return redirect("/admin")
+            return HttpResponse('''<script>alert("login successfull");window.location="/admin"</script>''') 
+            # return redirect("/admin")
         elif ob.type == "psychiatrist":
             request.session['lid']=ob.id
-            return redirect("/psychiatrist")
+            return HttpResponse('''<script>alert("login successfull");window.location="/psychiatrist"</script>''') 
+            # return redirect("/psychiatrist")
         elif ob.type == "user":
             request.session['lid']=ob.id
-            return redirect("/user_home")
+            return HttpResponse('''<script>alert("login successfull");window.location="/user_home"</script>''') 
+            # return redirect("/user_home")
         else:
                 return HttpResponse('''<script>alert("invalid");window.location="/"</script>''') 
     except:
