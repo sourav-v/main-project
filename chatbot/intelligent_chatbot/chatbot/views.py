@@ -297,10 +297,14 @@ def login1(request):
             # return redirect("/admin")
         elif ob.type == "psychiatrist":
             request.session['lid']=ob.id
+            obps=pyschiatrist.objects.get(lid__id=ob.id)
+            request.session['fn']=obps.firstname+" "+obps.lastname
             return HttpResponse('''<script>alert("login successfull");window.location="/psychiatrist"</script>''') 
             # return redirect("/psychiatrist")
         elif ob.type == "user":
             request.session['lid']=ob.id
+            obps=user.objects.get(lid__id=ob.id)
+            request.session['fn']=obps.firstname+" "+obps.lastname
             return HttpResponse('''<script>alert("login successfull");window.location="/user_home"</script>''') 
             # return redirect("/user_home")
         else:

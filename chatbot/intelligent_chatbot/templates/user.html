@@ -1,27 +1,22 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>Untitled Document</title>
-</head>
-
-<body>
+{% extends 'user_index.html' %}
+{% block body %}
+{% comment %} <body>
 <form id="form1" name="form1" method="post" action="">
   <table width="278" border="1">
    
     <tr>
       {% comment %} <td><div align="center"><a href="user_view_tips">VIEW TIPS</a></div></td> {% endcomment %}
-    </tr>
+    {% comment %} </tr>
     <tr>
       <td><div align="center"><a href="user_view_suggestions">VIEW SUGGESTIONS</a></div></td>
     </tr>
     <tr>
       <td><div align="center"><a href="user_view_complaint_reply">ADD COMPLAINT AND VIEW REPLY</a></div></td>
-    </tr>
+    </tr> {% endcomment %}
     {% comment %} <tr>
       <td><div align="center"><a href="user_chat">CHAT</a></div></td>
     </tr> {% endcomment %}
-    <tr>
+    {% comment %} <tr>
       <td><div align="center"><a href="#">CHATBOT</a></div></td>
     </tr>
     <tr>
@@ -36,4 +31,5 @@
   </table>
 </form>
 </body>
-</html>
+</html> {% endcomment %} 
+{%endblock%}
