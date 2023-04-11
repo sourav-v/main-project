@@ -7,13 +7,13 @@
   <table class="table table-striped">
     <tr>
       <th>QUESTIONS</th>
-      <th>ANSWER</th>
+      {% comment %} <th>ANSWER</th> {% endcomment %}
       <td>&nbsp;</td>
     </tr>
     {% for i in val  %}
     <tr>
       <td>{{i.questions}} </td>
-      <td>{{i.answers}} </td>
+      {% comment %} <td>{{i.answers}} </td> {% endcomment %}
 
       <td><label> <a href="{% url 'editdataset' id=i.id %}#about" class="btn btn-primary"> EDIT</a
    ><a href="{% url 'deletedataset' id=i.id %}"class="btn btn-danger">DELETE</a>

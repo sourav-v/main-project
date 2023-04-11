@@ -11,6 +11,7 @@ class user(models.Model):
     lid=models.ForeignKey(login,on_delete=models.CASCADE) 
     firstname=models.CharField(max_length=100)
     lastname=models.CharField(max_length=100)
+    image=models.FileField()
     place=models.CharField(max_length=100)
     gender=models.CharField(max_length=100)
     phone=models.BigIntegerField()
@@ -34,16 +35,18 @@ class complaint(models.Model):
     
 class dataset(models.Model):
     questions=models.CharField(max_length=250)
-    answers=models.CharField(max_length=250)
+  
     
     
 class pyschiatrist(models.Model):
     lid=models.ForeignKey(login,on_delete=models.CASCADE) 
     firstname=models.CharField(max_length=100)
     lastname=models.CharField(max_length=100)
+    expireance=models.CharField(max_length=100)
     place=models.CharField(max_length=100)
     gender=models.CharField(max_length=100)
     phone=models.BigIntegerField()
+    image=models.FileField()
     post=models.CharField(max_length=100)
     email=models.CharField(max_length=100)
     

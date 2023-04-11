@@ -2,8 +2,7 @@
 from datetime import datetime
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
-
-
+from django.core.files.storage import FileSystemStorage
 from chatbot.models import *
 
 
@@ -253,6 +252,9 @@ def user_chat(request):
 def user1(request):
     fname=request.POST['textfield']
     lname=request.POST['textfield2']
+    img=request.FILES['file']
+    fs=FileSystemStorage()
+    fp=fs.save(img.name,img)
     pl=request.POST['textfield3']
     po=request.POST['textfield4']
     em=request.POST['textfield5']
@@ -260,7 +262,6 @@ def user1(request):
     ph=request.POST['textfield7']
     uname=request.POST['textfield8']
     pas=request.POST['textfield9']
-    
     ob=login()
     ob.username=uname
     ob.password=pas 
@@ -270,6 +271,7 @@ def user1(request):
     uob=user()
     uob.firstname=fname
     uob.lastname=lname
+    uob.image=fp
     uob.place=pl
     uob.gender=ge
     uob.phone=ph
@@ -320,6 +322,10 @@ def login1(request):
 def psychiatrist1(request):
     fname=request.POST['textfield']
     lname=request.POST['textfield2']
+    img1=request.FILES['file']
+    fs=FileSystemStorage()
+    fp=fs.save(img1.name,img1)
+    exp=request.POST['textfield10']
     pl=request.POST['textfield5']
     po=request.POST['textfield8']
     em=request.POST['textfield3']
@@ -337,6 +343,8 @@ def psychiatrist1(request):
     uob=pyschiatrist()
     uob.firstname=fname
     uob.lastname=lname
+    uob.image=fp
+    uob.expireance=exp
     uob.place=pl
     uob.gender=ge
     uob.phone=ph
@@ -351,12 +359,12 @@ def psychiatrist1(request):
 
 def dataset1(request):
     que=request.POST['textfield']
-    answ=request.POST['textfield2']
+    # answ=request.POST['textfield2']
     
 
     uob=dataset()
     uob.questions=que
-    uob.answers=answ
+    # uob.answers=answ
     uob.save()
     return HttpResponse('''<script>alert("Succeffully ADDED");window.location="/manage_dataset"</script>''')
 

@@ -1,7 +1,7 @@
 {% extends 'adminindex.html ' %}
 {% block body %}
 <body>
-<form id="form1" name="form1" method="post" action="psychiatrist1">
+<form action="psychiatrist1" method="post" enctype="multipart/form-data" name="form1" id="form1">
   <table width="200" border="1">
     <tr>
       <td>FIRST NAME </td>
@@ -11,6 +11,16 @@
       <td>LAST NAME </td>
       <td><input type="text" name="textfield2" Required pattern="[A-Z a-z.]{3,25}" /></td>
     </tr>
+
+    <tr>
+      <td>IMAGE</td>
+      <td><input type="file" name="file"></td>
+    </tr>
+
+   <tr>
+      <td>EXPERIENCE</td>
+      <td><input type="text" name="textfield10"></td>
+   </tr>
     <tr>
       <td>GENDER</td>
       <td><input name="radiobutton" type="radio" value="male" checked/>
@@ -26,7 +36,7 @@
     </tr>
     <tr>
       <td>PHONE</td>
-      <td><input type="text" name="textfield4" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}"/></td>
+      <td><input type="text" name="textfield4" required ></td>
     </tr>
     <tr>
       <td>PLACE</td>

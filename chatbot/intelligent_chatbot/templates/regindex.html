@@ -32,13 +32,15 @@ function hideURLbar(){ window.scrollTo(0,1); } </script>
 	<div class="about-bottom main-agile book-form">
 		<div class="alert-close"> </div>
 		<h2 class="tittle">Register Here</h2>
-		<form action="user1" method="post">
+		<form action="user1" method="post" enctype="multipart/form-data">
 			<div class="form-date-w3-agileits">
 				<label> firstName </label>
 				<input type="text" name="textfield" placeholder="Your firstName"  required="">
 				<label> lastName </label>
 				<input type="text" name="textfield2" placeholder="Your laststName" required="">
-
+				<label> IMAGE </label>
+				<input type="file" name="file"  required="">
+		
 				<label> place </label>
 				<input type="text" name="textfield3" placeholder="enter your place" required="">
 				<label> post </label>
