@@ -95,7 +95,10 @@ urlpatterns=[
     
     path('psy_chat',views.psy_chat,name="psy_chat"),
     path('user_chat',views.user_chat,name="user_chat"),
-    
+        path('chat1/<int:id>',views.chat1,name="chat1"),
+        path('sendchat',views.sendchat,name='sendchat'),
+        path('chat3',views.chat3,name='chat3'),
+
     
     
     

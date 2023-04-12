@@ -18,7 +18,10 @@ def psychiatrist(request):
 
 
 def user_home(request):
-    return render(request,"user.html")
+    ob=user.objects.get(lid__id=request.session['lid'])
+    request.session['img']=str(ob.image)
+    img=request.session['img']
+    return render(request,"user.html",{'img':request.session['img']})
 
 
 
@@ -197,33 +200,66 @@ def editpsychiatrist(request,id):
 
 
 def editpsychiatrist1(request):
-    fname=request.POST['textfield']
-    lname=request.POST['textfield2']
-    pl=request.POST['textfield3']
-    po=request.POST['textfield4']
-    em=request.POST['textfield5']
-    ge=request.POST['radiobutton']
-    ph=request.POST['textfield7']
-    uob=pyschiatrist.objects.get(id=request.session['pid'])
-    uob.firstname=fname
-    uob.lastname=lname
-    uob.place=pl
-    uob.gender=ge
-    uob.phone=ph
-    uob.post=po
-    uob.email=em
-    
-    uob.save()
-    return HttpResponse('''<script>alert("Succeffully edited");window.location="/admin_manage_psychiatrist"</script>''')
+    try:
+        fname=request.POST['textfield']
+        lname=request.POST['textfield2']
+        img=request.FILES['file']
+        fs=FileSystemStorage()
+        fp=fs.save(img.name,img)
+        exp=request.POST['textfield8']
+        pl=request.POST['textfield3']
+        po=request.POST['textfield4']
+        em=request.POST['textfield5']
+        ge=request.POST['radiobutton']
+        ph=request.POST['textfield7']
+        uob=pyschiatrist.objects.get(id=request.session['pid'])
+        uob.firstname=fname
+        uob.lastname=lname
+        uob.expireance=exp
+        uob.place=pl
+        uob.gender=ge
+        uob.phone=ph
+        uob.post=po
+        uob.email=em
+        uob.image=fp
+        uob.save()
+        return HttpResponse('''<script>alert("Succeffully edited");window.location="/admin_manage_psychiatrist"</script>''')
+    except:
+        fname=request.POST['textfield']
+        lname=request.POST['textfield2']
+        exp=request.POST['textfield8']
+        pl=request.POST['textfield3']
+        po=request.POST['textfield4']
+        em=request.POST['textfield5']
+        ge=request.POST['radiobutton']
+        ph=request.POST['textfield7']
+        uob=pyschiatrist.objects.get(id=request.session['pid'])
+        uob.firstname=fname
+        uob.lastname=lname
+        uob.expireance=exp
+        uob.place=pl
+        uob.gender=ge
+        uob.phone=ph
+        uob.post=po
+        uob.email=em
+        uob.save()
+        return HttpResponse('''<script>alert("Succeffully edited");window.location="/admin_manage_psychiatrist"</script>''')
+        
     
 
-
+def sendchat(request):
+    msg=request.POST['textarea']
+    ob=chat()
+    ob.from_id=login.objects.get(id=request.session['lid'])
+    ob.to_id=login.objects.get(id=request.session['pid'])
+    ob.message=msg
+    ob.date=datetime.today()
+    ob.save()
+    return HttpResponse('''<script>window.location="/chat3"</script>''')
 
 def user_view_psychiatrist(request):
     ob=pyschiatrist.objects.all()
     return render(request,"user_view_psy.html",{'val':ob})
-
-
 
 def admin_view_registerd_user(request):
     ob=user.objects.all()
@@ -307,6 +343,8 @@ def login1(request):
             request.session['lid']=ob.id
             obps=user.objects.get(lid__id=ob.id)
             request.session['fn']=obps.firstname+" "+obps.lastname
+           
+            
             return HttpResponse('''<script>alert("login successfull");window.location="/user_home"</script>''') 
             # return redirect("/user_home")
         else:
@@ -352,7 +390,7 @@ def psychiatrist1(request):
     uob.email=em
     uob.lid=ob
     uob.save()
-    return HttpResponse('''<script>alert("Succeffully Registerd");window.location="/"</script>''')
+    return HttpResponse('''<script>alert("Succeffully Registerd");window.location="/admin_manage_psychiatrist"</script>''')
   
     
 
@@ -430,7 +468,18 @@ def addcomplaint1(request):
     return HttpResponse('''<script>alert("Succeffully ADDED");window.location="/user_view_complaint_reply"</script>''')
 
 
+def chat1(request,id):
+    request.session['pid']=id
+    ob=pyschiatrist.objects.get(lid__id=id)
+    from django.db.models import Q
+    obb=chat.objects.filter(Q(from_id=request.session['lid'],to_id=request.session['pid'])|Q(from_id=request.session['pid'],to_id=request.session['lid']))
+    return render(request,"chat.html",{'name':ob.firstname+" "+ob.lastname,'data':obb,'fr':request.session['lid']})
 
+def chat3(request):
+    ob=pyschiatrist.objects.get(lid__id=request.session['pid'])
+    from django.db.models import Q
+    obb=chat.objects.filter(Q(from_id=request.session['lid'],to_id=request.session['pid'])|Q(from_id=request.session['pid'],to_id=request.session['lid']))
+    return render(request,"chat.html",{'name':ob.firstname+" "+ob.lastname,'data':obb,'fr':request.session['lid']})
 
    
     

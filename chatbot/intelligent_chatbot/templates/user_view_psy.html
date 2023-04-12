@@ -18,7 +18,7 @@
       <td>{{i.email}}</td>
       <td>{{i.phone}}</td>
       <td><p><a href="user_view_tips#about">TIPS</a></p>
-      <p><a href="user_chat#about">CHAT</a></p></td>
+      <p><a href="{% url 'chat1' id=i.lid.id %}#about">CHAT</a></p></td>
     </tr>
     {% endfor %}
   </table>
