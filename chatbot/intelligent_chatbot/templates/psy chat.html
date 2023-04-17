@@ -7,10 +7,12 @@
       <td width="121"align="center" >USERNAME</td>
       <td width="87">&nbsp;</td>
     </tr>
+    {% for i in val %}
     <tr>
-      <td>&nbsp;</td>
-      <td><a href="#">CHAT</a></td>
+      <td>{{i.firstname}} {{i.lastname}}</td>
+      <td><a href="{% url 'chat2' id=i.lid.id %}">CHAT</a></td>
     </tr>
+    {% endfor %}
   </table>
 </form>
 </body>

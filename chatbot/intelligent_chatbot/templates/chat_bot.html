@@ -1,4 +1,5 @@
-{% extends 'psy_index.html' %}
+<!--<html>-->
+{% extends 'user_index.html' %}
 {% block body %}
 <head>
     <title>
@@ -93,32 +94,35 @@
 </style>
 </head>
 <body>
-<form id="form1" name="form1" method="post" action="{% url 'sendchat1' %}">
+<form id="form1" name="form1" method="post" action="{% url 'sendchatbot' %}">
     <div class="containern1">
-      <h1>{{name}} </h1>
+      
         <br/>
 </div>
-{% for d in data%}
- {% if fr == d.from_id.id %}
+{% for d in val %}
+
+ {% if "0" != d.from_id %}
     <div class="containern">
-      <p class="time-right" align="right">{{d.message}} ({{d.date}})</p>
+      <p class="time-right" align="right">{{d.chat}} </p>
         <br/>
 </div>
 {% else %}
  <div class="containern">
-  <p class="time-left" align="left">{{d.message}} ({{d.date}})    </p>
+  <p class="time-left" align="left">{{d.chat}}  </p>
      <br>
      <br>
      <br/>
 </div>
    {% endif %}
-{% endfor %}
+   {% endfor %}
+
     <!--<div class="containern ">-->
-        <input type="hidden" name="hid" value="{{fr}}"/>
+     
 
 <!--</div>-->
 
     <div class="container darker">
+      <input type="hidden" name="q" value="{{q}}"/>
    <textarea name="textarea" id="textareas" cols="20" rows="2" align="center-left" required class="form-control"></textarea>
       <input type="submit" name="button" id="button" value="send"  class="registerbtn"/>
 </div>
@@ -135,4 +139,5 @@
 </script>
 
 </body>
+<!--</html>-->
 {% endblock %}

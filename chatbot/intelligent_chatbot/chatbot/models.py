@@ -78,5 +78,7 @@ class chatbot(models.Model):
     reply=models.CharField(max_length=100)
     
     
-      
+class query(models.Model): 
+    query=models.CharField(max_length=500)
+    
     

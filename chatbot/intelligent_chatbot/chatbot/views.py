@@ -257,6 +257,19 @@ def sendchat(request):
     ob.save()
     return HttpResponse('''<script>window.location="/chat3"</script>''')
 
+
+
+def sendchat1(request):
+    msg=request.POST['textarea']
+    ob=chat()
+    ob.from_id=login.objects.get(id=request.session['lid'])
+    ob.to_id=login.objects.get(id=request.session['uid'])
+    ob.message=msg
+    ob.date=datetime.today()
+    ob.save()
+    return HttpResponse('''<script>window.location="/chat4"</script>''')
+
+
 def user_view_psychiatrist(request):
     ob=pyschiatrist.objects.all()
     return render(request,"user_view_psy.html",{'val':ob})
@@ -265,23 +278,16 @@ def admin_view_registerd_user(request):
     ob=user.objects.all()
     return render(request,"admin_view_registerd_user.html",{'val':ob})
 
-
-
-
 def psy_view_registerd_user(request):
     ob=user.objects.all()
     return render(request,"psy_view_registerd_user.html",{'val':ob})
 
-
 def psy_chat(request):
-    return render(request,"psy chat.html")
-
+    ob=user.objects.all()
+    return render(request,"psy chat.html",{'val':ob})
 
 def user_chat(request):
     return render(request,"user chat.html")
-
-
-
 
 
 
@@ -355,7 +361,22 @@ def login1(request):
         
         
     
+def sendchatbot(request):
+    q=request.POST['q']
+    msg=request.POST['textarea']
     
+    
+   
+    
+
+def chatbot_start(request):
+    ob=chatbot.objects.filter(pid__lid__id=request.session['lid'])
+    for i in ob:
+        i.delete()
+    ob=query.objects.get(id=1)
+    row={"from_id":"0","chat":ob.query}
+    return render(request,"chat_bot.html",{"val":[row],"q":ob.query})
+
 
 def psychiatrist1(request):
     fname=request.POST['textfield']
@@ -482,4 +503,17 @@ def chat3(request):
     return render(request,"chat.html",{'name':ob.firstname+" "+ob.lastname,'data':obb,'fr':request.session['lid']})
 
    
-    
+def chat2(request,id):
+    request.session['uid']=id
+    ob=user.objects.get(lid__id=id)
+    from django.db.models import Q
+    obb=chat.objects.filter(Q(from_id=request.session['lid'],to_id=request.session['uid'])|Q(from_id=request.session['uid'],to_id=request.session['lid']))
+    return render(request,"chat2.html",{'name':ob.firstname+" "+ob.lastname,'data':obb,'fr':request.session['lid']})
+
+def chat4(request):
+    ob=user.objects.get(lid__id=request.session['uid'])
+    from django.db.models import Q
+    obb=chat.objects.filter(Q(from_id=request.session['lid'],to_id=request.session['uid'])|Q(from_id=request.session['uid'],to_id=request.session['lid']))
+    return render(request,"chat2.html",{'name':ob.firstname+" "+ob.lastname,'data':obb,'fr':request.session['lid']})
+
+

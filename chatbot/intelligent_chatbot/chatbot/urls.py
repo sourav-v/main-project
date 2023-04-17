@@ -98,8 +98,13 @@ urlpatterns=[
         path('chat1/<int:id>',views.chat1,name="chat1"),
         path('sendchat',views.sendchat,name='sendchat'),
         path('chat3',views.chat3,name='chat3'),
+        path('sendchat1',views.sendchat1,name='sendchat1'),
+       path('chat2/<int:id>',views.chat2,name="chat2"),
+       path('chat4',views.chat4,name='chat4'),
 
-    
+     path('chatbot_start',views.chatbot_start,name="chatbot_start"),
+    #  path('chat_bot/<int:id>',views.chat_bot,name="chat_bot"),
+    # path('send_chatbot/<int:id>',views.send_chatbot,name="send_chatbot"),
     
     
     
