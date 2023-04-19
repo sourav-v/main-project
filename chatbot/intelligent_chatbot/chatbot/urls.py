@@ -104,7 +104,7 @@ urlpatterns=[
 
      path('chatbot_start',views.chatbot_start,name="chatbot_start"),
     #  path('chat_bot/<int:id>',views.chat_bot,name="chat_bot"),
-    # path('send_chatbot/<int:id>',views.send_chatbot,name="send_chatbot"),
+    path('sendchatbot',views.sendchatbot,name="sendchatbot"),
     
     
     

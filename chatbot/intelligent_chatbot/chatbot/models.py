@@ -1,7 +1,5 @@
 from django.db import models
-
 # Create your models here.
-
 class login(models.Model):
     username=models.CharField(max_length=100)
     password=models.CharField(max_length=100)
@@ -17,8 +15,6 @@ class user(models.Model):
     phone=models.BigIntegerField()
     post=models.CharField(max_length=100)
     email=models.CharField(max_length=100)
-    
-    
     
 class feedback(models.Model):
     uid=models.ForeignKey(user,on_delete=models.CASCADE) 
@@ -76,7 +72,11 @@ class chatbot(models.Model):
     pid=models.ForeignKey(user,on_delete=models.CASCADE) 
     questions=models.CharField(max_length=100)
     reply=models.CharField(max_length=100)
-    
+    sentiments=models.CharField(max_length=100)
+        
+class council(models.Model):
+    score=models.CharField(max_length=100)
+    result=models.CharField(max_length=100)
     
 class query(models.Model): 
     query=models.CharField(max_length=500)

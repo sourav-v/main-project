@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.core.files.storage import FileSystemStorage
 from chatbot.models import *
 
-
+from nltk.sentiment import SentimentIntensityAnalyzer
 # Create your views here.
 
 
@@ -323,11 +323,6 @@ def user1(request):
     uob.save()
     return HttpResponse('''<script>alert("Succeffully Registerd");window.location="/"</script>''')
   
-    
-    
-
-
-
 def login1(request):
     try:
         uname=request.POST['textfield']
@@ -348,26 +343,61 @@ def login1(request):
         elif ob.type == "user":
             request.session['lid']=ob.id
             obps=user.objects.get(lid__id=ob.id)
-            request.session['fn']=obps.firstname+" "+obps.lastname
-           
-            
+            request.session['fn']=obps.firstname+" "+obps.lastname   
             return HttpResponse('''<script>alert("login successfull");window.location="/user_home"</script>''') 
             # return redirect("/user_home")
         else:
                 return HttpResponse('''<script>alert("invalid");window.location="/"</script>''') 
     except:
             return HttpResponse('''<script>alert("invalid");window.location="/"</script>''') 
-
-        
-        
     
 def sendchatbot(request):
     q=request.POST['q']
+    qid=request.POST['qid']
     msg=request.POST['textarea']
+    sia = SentimentIntensityAnalyzer()
+    sm=sia.polarity_scores(msg)
+    # {'neg': 0.0, 'neu': 0.295, 'pos': 0.705, 'compound': 0.8012}
+    scr=2.5
+    if sm['neg']>sm['pos']:
+        scr=5-5*sm['neg']
+        if scr>2.5:
+            scr=scr-2.5
+    elif sm['neg']<sm['pos']:
+        scr=5*sm['neg']
+        if scr<2.5:
+            scr=scr+2.5
     
+    ob=chatbot()
+    ob.questions=q
+    ob.reply=msg
+    ob.sentiments=str(scr)
+    ob.pid=user.objects.get(lid__id=request.session['lid'])
+    ob.save()
+    ob=chatbot.objects.filter(pid__lid__id=request.session['lid'])
+    result=[]
+    for i in ob:
+        row={"from_id":"0","chat":i.questions}
+        result.append(row)
+        row={"from_id":"1","chat":i.reply}
+        result.append(row)
+    qid=int(qid)+1
+    ob=query.objects.get(id=qid)
+    row={"from_id":"0","chat":ob.query}
+    result.append(row)
+    return render(request,"chat_bot.html",{"val":result,"q":ob.query,"qid":qid})
+
+
+# def sendchatbot2(request):
+#     q=request.POST['q']
+#     msg=request.POST['textarea']
+#     ob=chatbot()
+#     ob.questions=q
+#     ob.reply=msg
+#     ob.pid=user.objects.get(lid__id=request.session['lid'])
+#     ob.save()
     
-   
-    
+#     return redirect('/sendchatbot')
 
 def chatbot_start(request):
     ob=chatbot.objects.filter(pid__lid__id=request.session['lid'])
@@ -375,7 +405,7 @@ def chatbot_start(request):
         i.delete()
     ob=query.objects.get(id=1)
     row={"from_id":"0","chat":ob.query}
-    return render(request,"chat_bot.html",{"val":[row],"q":ob.query})
+    return render(request,"chat_bot.html",{"val":[row],"q":ob.query,"qid":"1"})
 
 
 def psychiatrist1(request):
