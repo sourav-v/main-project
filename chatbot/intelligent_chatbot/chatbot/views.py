@@ -338,12 +338,14 @@ def login1(request):
             request.session['lid']=ob.id
             obps=pyschiatrist.objects.get(lid__id=ob.id)
             request.session['fn']=obps.firstname+" "+obps.lastname
+            request.session['pic']=obps.image.url
             return HttpResponse('''<script>alert("login successfull");window.location="/psychiatrist"</script>''') 
             # return redirect("/psychiatrist")
         elif ob.type == "user":
             request.session['lid']=ob.id
             obps=user.objects.get(lid__id=ob.id)
-            request.session['fn']=obps.firstname+" "+obps.lastname   
+            request.session['fn']=obps.firstname+" "+obps.lastname
+            request.session['pic']=obps.image.url   
             return HttpResponse('''<script>alert("login successfull");window.location="/user_home"</script>''') 
             # return redirect("/user_home")
         else:
@@ -355,37 +357,69 @@ def sendchatbot(request):
     q=request.POST['q']
     qid=request.POST['qid']
     msg=request.POST['textarea']
-    sia = SentimentIntensityAnalyzer()
-    sm=sia.polarity_scores(msg)
-    # {'neg': 0.0, 'neu': 0.295, 'pos': 0.705, 'compound': 0.8012}
-    scr=2.5
-    if sm['neg']>sm['pos']:
-        scr=5-5*sm['neg']
-        if scr>2.5:
-            scr=scr-2.5
-    elif sm['neg']<sm['pos']:
-        scr=5*sm['neg']
-        if scr<2.5:
-            scr=scr+2.5
+    button=request.POST['button']
+    if button == "send":
+        sia = SentimentIntensityAnalyzer()
+        sm=sia.polarity_scores(msg)
+        # {'neg': 0.0, 'neu': 0.295, 'pos': 0.705, 'compound': 0.8012}
+        scr=2.5
+        if sm['neg']>sm['pos']:
+            scr=5-5*sm['neg']
+            if scr>2.5:
+                scr=scr-2.5
+        elif sm['neg']<sm['pos']:
+            scr=5*sm['neg']
+            if scr<2.5:
+                scr=scr+2.5
+                
+        ob=chatbot()
+        ob.questions=q
+        ob.reply=msg
+        ob.sentiments=str(scr)
+        ob.pid=user.objects.get(lid__id=request.session['lid'])
+        ob.save()
+        ob=chatbot.objects.filter(pid__lid__id=request.session['lid'])
+        result=[]
+        for i in ob:
+            row={"from_id":"0","chat":i.questions}
+            result.append(row)
+            row={"from_id":"1","chat":i.reply}
+            result.append(row)
+        qid=int(qid)+1
+        ob=query.objects.get(id=qid)
+        row={"from_id":"0","chat":ob.query}
+        result.append(row)
+        return render(request,"chat_bot.html",{"val":result,"q":ob.query,"qid":qid})
+    else:
+        from django.db.models import Avg
+        ob=chatbot.objects.filter(pid__lid__id=request.session['lid']).aggregate(Avg('sentiments'))
+        print(ob,"======================")
+        if ob['sentiments__avg'] > int(2.5):
+            return HttpResponse(" you are a happy person.Make others too happy")
+        elif ob['sentiments__avg'] > int(2):
+            return HttpResponse("keep yourself motivated and be happy")
+        elif ob['sentiments__avg'] > int(1.5):
+            return HttpResponse("you are at the verge of getting depressed.try to do some meditations")
+        elif ob['sentiments__avg'] > int(1):
+            return HttpResponse("you are depressed.but you can overcome by doing meditations,hearing positive musics,reading books etc")
+        else:
+            return HttpResponse("you are very depressed.please consult a doctor")
+        
+
+        
+
+
+def finish_chatbot(request):
+    from django.db.models import Avg
+    ob=chatbot.objects.filter(pid__lid__id=request.session['lid']).aggregate(Avg('sentiments'))
+    print(ob,"======================")
+    if ob.score < int(0.4):
+        return HttpResponse("keep yourself motivated and be happy")
+    elif ob.score < int(0.1):
+        return HttpResponse("you are very depressed.please consult a doctor")
+    return
+        
     
-    ob=chatbot()
-    ob.questions=q
-    ob.reply=msg
-    ob.sentiments=str(scr)
-    ob.pid=user.objects.get(lid__id=request.session['lid'])
-    ob.save()
-    ob=chatbot.objects.filter(pid__lid__id=request.session['lid'])
-    result=[]
-    for i in ob:
-        row={"from_id":"0","chat":i.questions}
-        result.append(row)
-        row={"from_id":"1","chat":i.reply}
-        result.append(row)
-    qid=int(qid)+1
-    ob=query.objects.get(id=qid)
-    row={"from_id":"0","chat":ob.query}
-    result.append(row)
-    return render(request,"chat_bot.html",{"val":result,"q":ob.query,"qid":qid})
 
 
 # def sendchatbot2(request):

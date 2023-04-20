@@ -101,6 +101,7 @@ urlpatterns=[
         path('sendchat1',views.sendchat1,name='sendchat1'),
        path('chat2/<int:id>',views.chat2,name="chat2"),
        path('chat4',views.chat4,name='chat4'),
+       path('finish_chatbot',views.finish_chatbot,name='finish_chatbot'),
 
      path('chatbot_start',views.chatbot_start,name="chatbot_start"),
     #  path('chat_bot/<int:id>',views.chat_bot,name="chat_bot"),
